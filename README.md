@@ -1,21 +1,72 @@
-MIT License
+# CRS — The Collateral Risk Standard
 
-Copyright (c) 2026 RWALS
+**An open, reproducible, capture-resistant risk standard for everything pledged as collateral in DeFi.**
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Sister standard to [RWALS](https://www.rwalscore.com) — RWALS scores the liquidity of tokenized real-world assets; CRS scores the safety of all collateral. Two standards, one constitution: transparent, reproducible, capture-resistant, free.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+**Status: V1.0 — Public Draft for Comment**
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+---
+
+## Why this exists
+
+In the twelve months ending June 2026, the four largest open lending ecosystems suffered the same failure in four costumes: Aave's nine-figure rsETH bad debt, Euler's Elixir/Steam Labs collapse and monthly manual parameter grind, Morpho's frozen curated vaults, Centrifuge's unverifiable physical backing. One root cause: **collateral admitted on judgment, monitored by nobody, repriced after the loss.**
+
+CRS replaces judgment with a published, deterministic score — and committee repricing with continuous monitoring and automatic response.
+
+## The standard in one paragraph
+
+Every asset scores 0–100 across **eight dimensions** (liquidity, wrap depth, bridge exposure, oracle integrity, redemption, duration, backing verification, operational risk), subject to **five hard gates** that cannot be averaged away. Scores map to maximum LTV through one continuous formula — `maxLTV% = 0.75 × CRS + 20` for scores of 40 and above, zero below — so there are no cliff effects and no committee discretion. Scores fall automatically when monitored reality changes, with the evidence published; they rise only by open review.
+
+## The proof of work
+
+Run the standard retroactively on the year's incidents:
+
+```
+npm test
+```
+
+CRS V1.0 flags rsETH **INELIGIBLE on the day Aave listed it at 93% LTV**, using only information public at the time (Gate G2: single-attestor bridge route). wrsETH trips two gates. PT-class self-referential oracles are capped. Unverified physical backing is capped. Single-curator freeze authority is priced before listing, not discovered after. And sound collateral (WETH) passes clean — the standard protects without punishing.
+
+## Repository layout
+
+```
+CRS_V1_Methodology.md   The full standard: dimensions, weights, gates,
+                        monitoring triggers, and the Ten Commandments
+crs-scorer.js           Reference scorer (Node, zero dependencies)
+index.html              The platform site — computes every displayed score
+                        in the visitor's browser from published inputs
+                        (Commandment III, made literal)
+backtest.js             The incident backtest suite (Commandment X)
+```
+
+## Reproduce every score
+
+```
+node crs-scorer.js
+```
+
+Every published score ships with its complete input set. Run the scorer on the inputs and you get the score, bit for bit. If you cannot reproduce it, the score is invalid — that is Commandment III, and it is testable.
+
+## The Ten Commandments (summary)
+
+I. The methodology is public, complete, and free — forever.
+II. No issuer, protocol, or curator ever pays for a score.
+III. Every score is reproducible by anyone from published inputs.
+IV. No strength hides a weakness — hard gates are never waived.
+V. Scores change when reality changes, not when committees meet.
+VI. Every downgrade ships with its evidence.
+VII. Disputes are heard in public and resolved on the record.
+VIII. No single party — including the author — can bend a score.
+IX. The standard is free; only the rails are paid.
+X. Every failure becomes a factor.
+
+Full text and rationale in [CRS_V1_Methodology.md](CRS_V1_Methodology.md).
+
+## Contributing and disputes
+
+Methodology challenges, input corrections, and dimension proposals are welcome — open an issue. Per Commandment VII, all disputes are public and resolved on the record. Per Commandment VIII, methodology changes follow public proposal, open comment, and versioned publication.
+
+## License
+
+MIT — see [LICENSE](LICENSE). Reference scores in this repository are illustrative, computed from the published snapshot inputs embedded in the code, and are not financial advice.

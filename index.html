@@ -1,72 +1,404 @@
-# CRS — The Collateral Risk Standard
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRS — The Collateral Risk Standard</title>
+<meta name="description" content="An open, reproducible, capture-resistant risk standard for everything pledged as collateral. Sister standard to RWALS.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@125,500..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#0B0F15;          /* page */
+    --panel:#111722;        /* cards */
+    --panel2:#0E131C;
+    --line:#1F2937;         /* hairlines */
+    --steel:#8FA3B8;        /* secondary text */
+    --text:#E6EDF4;         /* primary text */
+    --heritage:#C9A24B;     /* RWALS gold — header hairline only */
+    --t1:#3FB68B; --t2:#7FB069; --t3:#D9A441; --t4:#D97941; --t5:#E25C5C;
+    --accent:#6FB7C9;       /* steel cyan */
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto} *{animation:none!important;transition:none!important}}
+  body{
+    background:var(--ink); color:var(--text);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;
+    font-size:18px; line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  .mono{font-family:'IBM Plex Mono',monospace}
+  .display{font-family:'Archivo',sans-serif; font-stretch:125%; letter-spacing:.01em}
+  a{color:var(--accent)}
+  a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 24px}
 
-**An open, reproducible, capture-resistant risk standard for everything pledged as collateral in DeFi.**
+  /* Header */
+  header{border-bottom:1px solid var(--line); position:relative}
+  header::after{content:"";display:block;height:2px;background:linear-gradient(90deg,var(--heritage),transparent 60%)}
+  .head-in{display:flex;justify-content:space-between;align-items:baseline;padding:20px 0;gap:16px;flex-wrap:wrap}
+  .wordmark{font-family:'Archivo';font-stretch:125%;font-weight:900;font-size:28px;letter-spacing:.04em}
+  .wordmark span{color:var(--accent)}
+  .sister{font-family:'IBM Plex Mono';font-size:13px;color:var(--steel)}
+  .sister a{color:var(--heritage);text-decoration:none}
 
-Sister standard to [RWALS](https://www.rwalscore.com) — RWALS scores the liquidity of tokenized real-world assets; CRS scores the safety of all collateral. Two standards, one constitution: transparent, reproducible, capture-resistant, free.
+  /* Hero */
+  .hero{padding:72px 0 56px;border-bottom:1px solid var(--line)}
+  .eyebrow{font-family:'IBM Plex Mono';font-size:13px;letter-spacing:.18em;text-transform:uppercase;color:var(--steel);margin-bottom:18px}
+  h1{font-family:'Archivo';font-stretch:125%;font-weight:800;font-size:clamp(30px,5vw,54px);line-height:1.12;max-width:21ch}
+  h1 em{font-style:normal;color:var(--t5)}
+  .hero p.lede{margin-top:22px;max-width:62ch;color:var(--steel);font-size:19px}
+  .hero p.lede strong{color:var(--text)}
 
-**Status: V1.0 — Public Draft for Comment**
+  /* The verdict card — signature element */
+  .verdict{margin-top:40px;border:1px solid var(--line);background:var(--panel);max-width:760px}
+  .verdict-head{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 22px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .verdict-head .sym{font-family:'IBM Plex Mono';font-weight:600;font-size:18px}
+  .verdict-head .asof{font-family:'IBM Plex Mono';font-size:13px;color:var(--steel)}
+  .verdict-body{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--line)}
+  @media(max-width:680px){.verdict-body{grid-template-columns:1fr}}
+  .vcell{padding:24px 22px}
+  .vcell+.vcell{border-left:1px solid var(--line)}
+  @media(max-width:680px){.vcell+.vcell{border-left:none;border-top:1px solid var(--line)}}
+  .vlabel{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
+  .vbig{font-family:'Archivo';font-stretch:125%;font-weight:900;font-size:46px;line-height:1.05;margin-top:8px}
+  .vbig.bad{color:var(--t5)}
+  .vsub{font-family:'IBM Plex Mono';font-size:14px;color:var(--steel);margin-top:6px}
+  .verdict-gate{padding:14px 22px;font-family:'IBM Plex Mono';font-size:14px;color:var(--t5)}
+  .verdict-foot{padding:14px 22px;border-top:1px solid var(--line);font-size:15px;color:var(--steel)}
+  .verdict-foot strong{color:var(--text)}
 
----
+  /* Sections */
+  section{padding:64px 0;border-bottom:1px solid var(--line)}
+  h2{font-family:'Archivo';font-stretch:125%;font-weight:800;font-size:clamp(24px,3.4vw,34px);margin-bottom:10px}
+  .section-lede{color:var(--steel);max-width:66ch;margin-bottom:34px}
+  .section-lede strong{color:var(--text)}
 
-## Why this exists
+  /* Four costumes */
+  .costumes{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+  .costume{background:var(--panel2);padding:22px}
+  .costume h3{font-family:'IBM Plex Mono';font-size:14px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  .costume p{font-size:15.5px;color:var(--steel)}
+  .costume p strong{color:var(--text)}
 
-In the twelve months ending June 2026, the four largest open lending ecosystems suffered the same failure in four costumes: Aave's nine-figure rsETH bad debt, Euler's Elixir/Steam Labs collapse and monthly manual parameter grind, Morpho's frozen curated vaults, Centrifuge's unverifiable physical backing. One root cause: **collateral admitted on judgment, monitored by nobody, repriced after the loss.**
+  /* Dimensions */
+  .dims{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+  .dim{background:var(--panel);padding:22px}
+  .dim .dtag{display:flex;justify-content:space-between;align-items:baseline;font-family:'IBM Plex Mono';font-size:13px;color:var(--steel);margin-bottom:8px}
+  .dim .dtag b{color:var(--accent);font-weight:600}
+  .dim h3{font-size:18px;font-weight:600;margin-bottom:8px}
+  .dim p{font-size:15px;color:var(--steel)}
 
-CRS replaces judgment with a published, deterministic score — and committee repricing with continuous monitoring and automatic response.
+  /* Gates */
+  .gates{border:1px solid var(--line)}
+  .gate{display:grid;grid-template-columns:90px 1fr 200px;gap:16px;padding:18px 22px;border-bottom:1px solid var(--line);align-items:baseline}
+  .gate:last-child{border-bottom:none}
+  @media(max-width:680px){.gate{grid-template-columns:1fr}}
+  .gate .gid{font-family:'IBM Plex Mono';font-weight:600;color:var(--t5)}
+  .gate .grule{font-size:16px}
+  .gate .geff{font-family:'IBM Plex Mono';font-size:13px;letter-spacing:.08em;color:var(--steel);text-align:right}
+  @media(max-width:680px){.gate .geff{text-align:left}}
 
-## The standard in one paragraph
+  /* Formula */
+  .formula{border:1px solid var(--line);background:var(--panel);padding:26px 24px;font-family:'IBM Plex Mono'}
+  .formula .f{font-size:clamp(17px,2.6vw,22px);color:var(--text)}
+  .formula .f b{color:var(--accent)}
+  .formula .fnote{font-size:14px;color:var(--steel);margin-top:12px}
 
-Every asset scores 0–100 across **eight dimensions** (liquidity, wrap depth, bridge exposure, oracle integrity, redemption, duration, backing verification, operational risk), subject to **five hard gates** that cannot be averaged away. Scores map to maximum LTV through one continuous formula — `maxLTV% = 0.75 × CRS + 20` for scores of 40 and above, zero below — so there are no cliff effects and no committee discretion. Scores fall automatically when monitored reality changes, with the evidence published; they rise only by open review.
+  /* Scoreboard */
+  .board{border:1px solid var(--line);overflow-x:auto}
+  table{width:100%;border-collapse:collapse;min-width:680px}
+  thead th{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel);text-align:left;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--panel2)}
+  tbody td{padding:14px;border-bottom:1px solid var(--line);font-size:16px;vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  td.sym{font-family:'IBM Plex Mono';font-weight:600}
+  td.num{font-family:'IBM Plex Mono'}
+  .tierchip{font-family:'IBM Plex Mono';font-size:13px;font-weight:600;padding:3px 10px;border:1px solid currentColor;border-radius:2px;white-space:nowrap}
+  .T1{color:var(--t1)} .T2{color:var(--t2)} .T3{color:var(--t3)} .T4{color:var(--t4)} .T5{color:var(--t5)}
+  .inel{color:var(--t5);font-family:'IBM Plex Mono';font-weight:600;font-size:14px}
+  details.breakdown{margin-top:6px}
+  details.breakdown summary{cursor:pointer;font-family:'IBM Plex Mono';font-size:13px;color:var(--accent);list-style:none}
+  details.breakdown summary::before{content:"+ "}
+  details.breakdown[open] summary::before{content:"− "}
+  .dimbars{margin-top:10px;display:grid;gap:6px}
+  .dimbar{display:grid;grid-template-columns:200px 1fr 48px;gap:10px;align-items:center;font-family:'IBM Plex Mono';font-size:12.5px;color:var(--steel)}
+  @media(max-width:680px){.dimbar{grid-template-columns:130px 1fr 44px}}
+  .bar{height:8px;background:var(--panel2);border:1px solid var(--line)}
+  .bar i{display:block;height:100%;background:var(--accent)}
+  .reproduce{font-family:'IBM Plex Mono';font-size:13.5px;color:var(--steel);margin-top:14px}
+  .reproduce b{color:var(--accent)}
 
-## The proof of work
+  /* Commandments */
+  .cmds{counter-reset:cmd;border:1px solid var(--line)}
+  .cmd{counter-increment:cmd;display:grid;grid-template-columns:84px 1fr;gap:18px;padding:22px;border-bottom:1px solid var(--line)}
+  .cmd:last-child{border-bottom:none}
+  @media(max-width:680px){.cmd{grid-template-columns:54px 1fr;gap:12px}}
+  .cmd::before{
+    content:counter(cmd,upper-roman);
+    font-family:'Archivo';font-stretch:125%;font-weight:900;font-size:30px;color:var(--heritage);
+    line-height:1.1;
+  }
+  .cmd h3{font-size:18px;font-weight:600;margin-bottom:6px}
+  .cmd p{font-size:15.5px;color:var(--steel)}
 
-Run the standard retroactively on the year's incidents:
+  /* Rails */
+  .rails{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+  @media(max-width:680px){.rails{grid-template-columns:1fr}}
+  .rail{background:var(--panel);padding:26px 24px}
+  .rail h3{font-family:'IBM Plex Mono';font-size:14px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:14px}
+  .rail.free h3{color:var(--t1)} .rail.paid h3{color:var(--accent)}
+  .rail ul{list-style:none}
+  .rail li{padding:8px 0;border-bottom:1px solid var(--line);font-size:15.5px;color:var(--steel)}
+  .rail li:last-child{border-bottom:none}
+  .rail li strong{color:var(--text)}
 
-```
-npm test
-```
+  footer{padding:44px 0 64px;color:var(--steel);font-size:14.5px}
+  footer .mono{font-size:13px}
+  .vstamp{font-family:'IBM Plex Mono';font-size:12px;letter-spacing:.14em;color:var(--steel);text-transform:uppercase}
+</style>
+</head>
+<body>
 
-CRS V1.0 flags rsETH **INELIGIBLE on the day Aave listed it at 93% LTV**, using only information public at the time (Gate G2: single-attestor bridge route). wrsETH trips two gates. PT-class self-referential oracles are capped. Unverified physical backing is capped. Single-curator freeze authority is priced before listing, not discovered after. And sound collateral (WETH) passes clean — the standard protects without punishing.
+<header>
+  <div class="wrap head-in">
+    <div class="wordmark">CRS<span>·</span>COLLATERAL RISK STANDARD</div>
+    <div class="sister">sister standard to <a href="https://www.rwalscore.com">RWALS</a> &nbsp;·&nbsp; <span class="vstamp">V1.0 public draft</span></div>
+  </div>
+</header>
 
-## Repository layout
+<section class="hero">
+  <div class="wrap">
+    <div class="eyebrow">An open standard for everything pledged as collateral</div>
+    <h1>On April 17, 2026, rsETH carried a 93% LTV. The standard says: <em>ineligible.</em></h1>
+    <p class="lede">Twelve months. Four major lending ecosystems. The same failure in four costumes: collateral admitted on judgment, monitored by nobody, repriced after the loss. <strong>CRS replaces judgment with a published, reproducible score — and committee repricing with automatic response.</strong></p>
 
-```
-docs/CRS_V1_Methodology.md   The full standard: dimensions, weights, gates,
-                             monitoring triggers, and the Ten Commandments
-src/crs-scorer.js            Reference scorer (Node, zero dependencies)
-site/index.html              The platform site — computes every displayed
-                             score in the visitor's browser from published
-                             inputs (Commandment III, made literal)
-test/backtest.js             The incident backtest suite (Commandment X)
-```
+    <div class="verdict" id="verdict"><!-- rendered by the scorer --></div>
+  </div>
+</section>
 
-## Reproduce every score
+<section id="problem">
+  <div class="wrap">
+    <h2>One problem, four costumes</h2>
+    <p class="section-lede">Everything below is from the public governance record of the past twelve months.</p>
+    <div class="costumes">
+      <div class="costume"><h3>Aave</h3><p>An estimated <strong>one hundred twenty-three to two hundred thirty million dollars</strong> in bad debt after a token wrapped four layers deep, bridged over a single-attestor route, was underwritten like native ETH.</p></div>
+      <div class="costume"><h3>Euler</h3><p>The Elixir and Steam Labs collapse left users seeking treasury compensation — while risk stewards grind <strong>monthly manual parameter updates</strong> across dozens of expiring instruments.</p></div>
+      <div class="costume"><h3>Morpho</h3><p>Depositors learned that curated vaults can <strong>freeze withdrawals</strong>, and that oracle deviation is handled by improvised timelocks instead of a standard.</p></div>
+      <div class="costume"><h3>Centrifuge</h3><p>No oracle anywhere proves a physical asset <strong>actually exists</strong> and matches its on-chain representation. MANTRA and Tangible/USDR were the bill for "trust us."</p></div>
+    </div>
+  </div>
+</section>
 
-```
-node src/crs-scorer.js
-```
+<section id="dimensions">
+  <div class="wrap">
+    <h2>Eight dimensions. Every one bought with real losses.</h2>
+    <p class="section-lede">Each dimension is scored 0–100 from published, checkable sub-criteria. Weights are fixed and public.</p>
+    <div class="dims">
+      <div class="dim"><div class="dtag"><b>D1</b><span>weight 20%</span></div><h3>Liquidity Depth &amp; Exit Capacity</h3><p>Can the protocol actually liquidate this at scale? Depth, venues, slippage at size, time to exit. The RWALS DNA.</p></div>
+      <div class="dim"><div class="dtag"><b>D2</b><span>weight 15%</span></div><h3>Wrap &amp; Rehypothecation Depth</h3><p>Every wrapper is a new way to die. rsETH reached Aave wrapped four times — the outermost wrap is what broke.</p></div>
+      <div class="dim"><div class="dtag"><b>D3</b><span>weight 12%</span></div><h3>Bridge &amp; Cross-Chain Exposure</h3><p>Shared-supply tokens inherit the weakest verification path on any chain. Kelp's Unichain route was a 1-of-1 DVN.</p></div>
+      <div class="dim"><div class="dtag"><b>D4</b><span>weight 13%</span></div><h3>Oracle Integrity</h3><p>Self-referential pricing — internal exchange rates, linear discount models — with no external market check.</p></div>
+      <div class="dim"><div class="dtag"><b>D5</b><span>weight 12%</span></div><h3>Redemption Posture</h3><p>Is there a par redemption path, at what notice, gated by whom? An AMM exit is not redemption.</p></div>
+      <div class="dim"><div class="dtag"><b>D6</b><span>weight 8%</span></div><h3>Duration Risk</h3><p>A 14-day principal token and a 365-day principal token are not the same asset. Spot collateral scores 100 here.</p></div>
+      <div class="dim"><div class="dtag"><b>D7</b><span>weight 12%</span></div><h3>Backing Verification</h3><p>Who independently verified the backing exists — reserves, custody, or the physical asset itself, on a fixed cadence?</p></div>
+      <div class="dim"><div class="dtag"><b>D8</b><span>weight 8%</span></div><h3>Operational &amp; Governance Risk</h3><p>Admin keys, upgrade powers, curator concentration, withdrawal-freeze authority, regulatory posture, incident history.</p></div>
+    </div>
+  </div>
+</section>
 
-Every published score ships with its complete input set. Run the scorer on the inputs and you get the score, bit for bit. If you cannot reproduce it, the score is invalid — that is Commandment III, and it is testable.
+<section id="gates">
+  <div class="wrap">
+    <h2>Five hard gates that cannot be averaged away</h2>
+    <p class="section-lede">Averages launder fatal flaws. A perfect liquidity score does not excuse a single-attestor bridge. <strong>Gates are never waived, for any asset, for any reason.</strong></p>
+    <div class="gates">
+      <div class="gate"><span class="gid">G1</span><span class="grule">Effective wrap depth of four layers or more</span><span class="geff">INELIGIBLE</span></div>
+      <div class="gate"><span class="gid">G2</span><span class="grule">Any live bridge route securing the asset's supply verified by a single attestor</span><span class="geff">INELIGIBLE, EVERY CHAIN</span></div>
+      <div class="gate"><span class="gid">G3</span><span class="grule">Off-chain or physical backing with no independent, recurring verification</span><span class="geff">CAPPED AT TIER 3</span></div>
+      <div class="gate"><span class="gid">G4</span><span class="grule">Price oracle is self-referential with no external market check</span><span class="geff">CAPPED AT TIER 3</span></div>
+      <div class="gate"><span class="gid">G5</span><span class="grule">Time-to-maturity under thirty days</span><span class="geff">WEEKLY LTV STEP-DOWN</span></div>
+    </div>
+  </div>
+</section>
 
-## The Ten Commandments (summary)
+<section id="map">
+  <div class="wrap">
+    <h2>One formula. No cliffs. No committees.</h2>
+    <p class="section-lede">Bucketed frameworks create cliff effects between adjacent scores. CRS maps score to maximum LTV continuously. Protocols stay sovereign — governance may always set parameters <strong>below</strong> the ceiling. The standard never tells a protocol to take more risk; only where risk ends.</p>
+    <div class="formula">
+      <div class="f">max LTV % &nbsp;=&nbsp; <b>0.75 × CRS + 20</b> &nbsp;&nbsp;for CRS ≥ 40</div>
+      <div class="f" style="margin-top:8px">max LTV % &nbsp;=&nbsp; <b>0</b> &nbsp;&nbsp;for CRS &lt; 40, or any fatal gate</div>
+      <div class="fnote">Scores fall by machine — monitored triggers, evidence published at the moment of change. Scores rise only by published review. Risk is asymmetric; so is the standard.</div>
+    </div>
+  </div>
+</section>
 
-I. The methodology is public, complete, and free — forever.
-II. No issuer, protocol, or curator ever pays for a score.
-III. Every score is reproducible by anyone from published inputs.
-IV. No strength hides a weakness — hard gates are never waived.
-V. Scores change when reality changes, not when committees meet.
-VI. Every downgrade ships with its evidence.
-VII. Disputes are heard in public and resolved on the record.
-VIII. No single party — including the author — can bend a score.
-IX. The standard is free; only the rails are paid.
-X. Every failure becomes a factor.
+<section id="board-section">
+  <div class="wrap">
+    <h2>The board</h2>
+    <p class="section-lede">Reference scores, methodology V1.0, illustrative published inputs. Two rows are backtests — assets scored exactly as they were configured on the day a protocol listed them.</p>
+    <div class="board">
+      <table id="board" aria-label="CRS reference scores">
+        <thead><tr><th>Asset</th><th>CRS Score</th><th>Tier</th><th>Max LTV</th><th>Gates</th><th>Status</th></tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <p class="reproduce"><b>Commandment III, made literal:</b> every number above is computed in your browser, right now, by the open scorer embedded in this page, from the inputs shown in each breakdown. View source — that is the methodology.</p>
+  </div>
+</section>
 
-Full text and rationale in [docs/CRS_V1_Methodology.md](docs/CRS_V1_Methodology.md).
+<section id="commandments">
+  <div class="wrap">
+    <h2>The Ten Commandments of CRS</h2>
+    <p class="section-lede">Not values — <strong>constraints.</strong> Anyone can verify compliance with every one of them. A violation of any one voids the standard's claim to neutrality.</p>
+    <div class="cmds">
+      <div class="cmd"><div><h3>The methodology shall be public, complete, and free — forever.</h3><p>No black box, no premium tier of truth. Rubric, weights, gates, and reference scorer: open source in perpetuity.</p></div></div>
+      <div class="cmd"><div><h3>No issuer, protocol, or curator shall ever pay for a score.</h3><p>The ratings-agency conflict — graded by the graded — caused 2008. It will not be rebuilt here. Scores cannot be bought, expedited, or sponsored.</p></div></div>
+      <div class="cmd"><div><h3>Every score shall be reproducible by anyone, from published inputs.</h3><p>Run the open scorer on the published inputs and you get the published score, bit for bit. If you cannot reproduce it, the score is invalid.</p></div></div>
+      <div class="cmd"><div><h3>No strength shall hide a weakness.</h3><p>Hard gates exist because averages launder fatal flaws. Gates are never waived — for any asset, for any reason.</p></div></div>
+      <div class="cmd"><div><h3>Scores shall change when reality changes — not when committees meet.</h3><p>Monitoring is continuous, downgrades are automatic. The standard does not wait for a governance call to acknowledge a fact.</p></div></div>
+      <div class="cmd"><div><h3>Every downgrade shall ship with its evidence.</h3><p>Trigger, timestamp, data source, and the exact rubric line invoked — published at the moment of change, permanently, on the record.</p></div></div>
+      <div class="cmd"><div><h3>Disputes shall be heard in public and resolved on the record.</h3><p>Any issuer or community may challenge a score. The challenge, the evidence, and the ruling are all published. Nothing is settled in private.</p></div></div>
+      <div class="cmd"><div><h3>No single party — including the author — shall hold the power to bend a score.</h3><p>Capture resistance by governance design: methodology changes require public proposal, open comment, and versioned publication. There is no override key.</p></div></div>
+      <div class="cmd"><div><h3>The standard is free; only the rails are paid.</h3><p>Sustainability without corruption. Methodology and scores are public goods. Revenue comes only from delivery — API, on-chain feeds, integration — never from the scores.</p></div></div>
+      <div class="cmd"><div><h3>Every failure becomes a factor.</h3><p>Each industry post-mortem must be scoreable retroactively — with the standard catching what was missed — or the standard amends itself in public. V1.0 is backtested against rsETH, wrsETH, Elixir/Steam Labs, the wstETH misalignment, and Tangible/USDR. Every future incident joins the test suite.</p></div></div>
+    </div>
+  </div>
+</section>
 
-## Contributing and disputes
+<section id="rails">
+  <div class="wrap">
+    <h2>Free standard. Paid rails.</h2>
+    <p class="section-lede">Commandment IX is the business model. The truth is free; the plumbing that delivers it in real time is not.</p>
+    <div class="rails">
+      <div class="rail free">
+        <h3>Free, forever</h3>
+        <ul>
+          <li><strong>The full methodology</strong> — rubrics, weights, gates, version history</li>
+          <li><strong>Published scores</strong> with their complete input sets</li>
+          <li><strong>The reference scorer</strong> — open source, runs anywhere, including this page</li>
+          <li><strong>The dispute process</strong> — open to any issuer or community</li>
+        </ul>
+      </div>
+      <div class="rail paid">
+        <h3>Paid rails</h3>
+        <ul>
+          <li><strong>Real-time score API</strong> — live liquidity, oracle-deviation and supply-invariant inputs</li>
+          <li><strong>Downgrade webhooks</strong> — the trigger and its evidence, pushed the moment it fires</li>
+          <li><strong>On-chain score oracle</strong> — risk stewards and curators read scores directly; parameters track the ceiling automatically within governance-set bounds</li>
+          <li><strong>Integration support</strong> — adoption playbooks for DAO governance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
 
-Methodology challenges, input corrections, and dimension proposals are welcome — open an issue. Per Commandment VII, all disputes are public and resolved on the record. Per Commandment VIII, methodology changes follow public proposal, open comment, and versioned publication.
+<footer>
+  <div class="wrap">
+    <p>CRS is published by the author of <a href="https://www.rwalscore.com">RWALS</a> as an open standard. RWALS scores the liquidity of tokenized real-world assets; CRS scores the safety of all collateral. Two standards, one constitution: transparent, reproducible, capture-resistant, free.</p>
+    <p class="mono" style="margin-top:14px">Methodology CRS-1.0 · Public draft for comment · Reference scores are illustrative and computed client-side from the published inputs embedded in this page.</p>
+  </div>
+</footer>
 
-## License
+<script>
+/* ============================================================
+   CRS V1.0 reference scorer — identical logic to crs-scorer.js.
+   Commandment III: this page computes its own scores.
+   ============================================================ */
+const WEIGHTS={D1:.20,D2:.15,D3:.12,D4:.13,D5:.12,D6:.08,D7:.12,D8:.08};
+const DIMNAMES={D1:"Liquidity & Exit",D2:"Wrap Depth",D3:"Bridge Exposure",D4:"Oracle Integrity",D5:"Redemption",D6:"Duration",D7:"Backing Verification",D8:"Operational & Governance"};
+const clamp=x=>Math.max(0,Math.min(100,x));
+const r2=x=>Math.round(x*100)/100;
 
-MIT — see [LICENSE](LICENSE). Reference scores in this repository are illustrative, computed from the published snapshot inputs embedded in the code, and are not financial advice.
+function scoreD1(i){const{exitCapacityUsd24h:e,slippagePctAtSize:sl,independentVenues:v,largestProtocolPositionUsd:p}=i.liquidity;let s=0;const c=p>0?e/p:10;if(c>=10)s=100;else if(c>=5)s=85;else if(c>=2)s=65;else if(c>=1)s=40;else s=15;if(sl>1)s-=15;if(sl>3)s-=15;if(v<3)s-=10;if(v<2)s-=15;return clamp(s)}
+function scoreD2(i){const{wrapDepth:w,parUnwrapPath:p}=i.wrap;const b={0:100,1:75,2:45,3:20}[Math.min(w,3)]??20;return clamp(b+(p?10:0))}
+function scoreD3(i){const{bridgedSupply:b,sharedSupplyOFT:o,minVerifiersOnAnyRoute:m,supplyInvariantMonitored:mon}=i.bridge;if(!b)return 100;let s;if(m>=3)s=o?70:85;else if(m===2)s=o?45:60;else s=10;if(mon)s+=10;return clamp(s)}
+function scoreD4(i){const{externalMarketOracle:e,independentProviders:p,deviationProtection:d,selfReferential:sr}=i.oracle;if(sr&&!e)return 25;let s=e?60:30;if(p>=2)s+=20;if(d)s+=20;return clamp(s)}
+function scoreD5(i){const{parRedemption:p,permissionless:pl,noticeHours:n,issuerCanPause:ip}=i.redemption;if(!p)return 0;let s=60;if(pl)s+=20;if(n<=24)s+=20;else if(n<=168)s+=10;if(ip)s-=30;return clamp(s)}
+function scoreD6(i){const{timeBound:t,daysToMaturity:d,preMaturityParExit:px}=i.duration;if(!t)return 100;let s;if(d>=180)s=70;else if(d>=90)s=55;else if(d>=30)s=40;else s=15;if(px)s+=20;return clamp(s)}
+function scoreD7(i){const{backingType:bt,verification:v}=i.backing;if(bt==="native")return 100;return clamp({realtime_por:100,recurring_independent:85,quarterly_audit:50,self_reported:15,none:0}[v]??0)}
+function scoreD8(i){const{adminTimelock:a,upgradeable:u,curatorConcentration:c,withdrawalFreezeAuthority:w,incidentHistory:h}=i.operational;let s=70;if(a)s+=15;if(!u)s+=15;if(c==="single")s-=25;if(w)s-=25;if(h)s-=20;return clamp(s)}
+
+function gatesOf(i){const g=[];
+  if(i.wrap.wrapDepth>=4)g.push({gate:"G1",rule:"Wrap depth ≥ 4 layers",effect:"INELIGIBLE"});
+  if(i.bridge.bridgedSupply&&i.bridge.minVerifiersOnAnyRoute<=1)g.push({gate:"G2",rule:"Single-attestor bridge route in supply graph",effect:"INELIGIBLE"});
+  if((i.backing.backingType==="physical"||i.backing.backingType==="offchain")&&!["realtime_por","recurring_independent"].includes(i.backing.verification))g.push({gate:"G3",rule:"Off-chain backing without independent recurring verification",effect:"TIER3_CAP"});
+  if(i.oracle.selfReferential&&!i.oracle.externalMarketOracle)g.push({gate:"G4",rule:"Self-referential oracle, no external market check",effect:"TIER3_CAP"});
+  if(i.duration.timeBound&&i.duration.daysToMaturity<30)g.push({gate:"G5",rule:"Time-to-maturity under 30 days",effect:"STEP_DOWN"});
+  return g}
+
+function scoreAsset(a){const i=a.inputs;
+  const dims={D1:scoreD1(i),D2:scoreD2(i),D3:scoreD3(i),D4:scoreD4(i),D5:scoreD5(i),D6:scoreD6(i),D7:scoreD7(i),D8:scoreD8(i)};
+  let comp=0;for(const k in WEIGHTS)comp+=WEIGHTS[k]*dims[k];comp=r2(comp);
+  const gates=gatesOf(i);
+  let tier;if(gates.some(g=>g.effect==="INELIGIBLE"))tier="T5";
+  else{if(comp>=85)tier="T1";else if(comp>=70)tier="T2";else if(comp>=55)tier="T3";else if(comp>=40)tier="T4";else tier="T5";
+    if(gates.some(g=>g.effect==="TIER3_CAP")&&(tier==="T1"||tier==="T2"))tier="T3";}
+  let score=comp;
+  if(tier==="T3"&&comp>69&&gates.some(g=>g.effect==="TIER3_CAP"))score=69;
+  const ltv=(tier==="T5"||score<40)?0:r2(.75*score+20);
+  return{...a,dims,composite:comp,gates,tier,score,ltv,eligible:tier!=="T5"}}
+
+/* Published inputs — identical to crs-scorer.js reference configs */
+const ASSETS=[
+ {symbol:"WETH",name:"Wrapped Ether",asOf:"2026-06-12",inputs:{liquidity:{exitCapacityUsd24h:5e9,slippagePctAtSize:.1,independentVenues:10,largestProtocolPositionUsd:4e8},wrap:{wrapDepth:1,parUnwrapPath:true},bridge:{bridgedSupply:false,sharedSupplyOFT:false,minVerifiersOnAnyRoute:99,supplyInvariantMonitored:true},oracle:{externalMarketOracle:true,independentProviders:3,deviationProtection:true,selfReferential:false},redemption:{parRedemption:true,permissionless:true,noticeHours:0,issuerCanPause:false},duration:{timeBound:false,daysToMaturity:null,preMaturityParExit:false},backing:{backingType:"native",verification:"realtime_por"},operational:{adminTimelock:true,upgradeable:false,curatorConcentration:"none",withdrawalFreezeAuthority:false,incidentHistory:false}}},
+ {symbol:"USDC",name:"USD Coin",asOf:"2026-06-12",inputs:{liquidity:{exitCapacityUsd24h:8e9,slippagePctAtSize:.05,independentVenues:12,largestProtocolPositionUsd:9e8},wrap:{wrapDepth:0,parUnwrapPath:true},bridge:{bridgedSupply:true,sharedSupplyOFT:false,minVerifiersOnAnyRoute:3,supplyInvariantMonitored:true},oracle:{externalMarketOracle:true,independentProviders:3,deviationProtection:true,selfReferential:false},redemption:{parRedemption:true,permissionless:false,noticeHours:24,issuerCanPause:true},duration:{timeBound:false,daysToMaturity:null,preMaturityParExit:false},backing:{backingType:"offchain",verification:"recurring_independent"},operational:{adminTimelock:true,upgradeable:true,curatorConcentration:"none",withdrawalFreezeAuthority:true,incidentHistory:false}}},
+ {symbol:"wstETH",name:"Wrapped Staked Ether (Lido)",asOf:"2026-06-12",inputs:{liquidity:{exitCapacityUsd24h:1.5e9,slippagePctAtSize:.3,independentVenues:6,largestProtocolPositionUsd:5e8},wrap:{wrapDepth:2,parUnwrapPath:true},bridge:{bridgedSupply:false,sharedSupplyOFT:false,minVerifiersOnAnyRoute:99,supplyInvariantMonitored:true},oracle:{externalMarketOracle:true,independentProviders:2,deviationProtection:true,selfReferential:false},redemption:{parRedemption:true,permissionless:true,noticeHours:72,issuerCanPause:false},duration:{timeBound:false,daysToMaturity:null,preMaturityParExit:false},backing:{backingType:"onchain",verification:"realtime_por"},operational:{adminTimelock:true,upgradeable:true,curatorConcentration:"none",withdrawalFreezeAuthority:false,incidentHistory:true}}},
+ {symbol:"rsETH",name:"Kelp Restaked ETH — as configured at Aave listing",asOf:"2026-04-17",backtest:"Aave at the time: 93% LTV / 95% LT in eMode.",inputs:{liquidity:{exitCapacityUsd24h:3e8,slippagePctAtSize:1.2,independentVenues:4,largestProtocolPositionUsd:2.2e8},wrap:{wrapDepth:3,parUnwrapPath:false},bridge:{bridgedSupply:true,sharedSupplyOFT:true,minVerifiersOnAnyRoute:1,supplyInvariantMonitored:false},oracle:{externalMarketOracle:true,independentProviders:1,deviationProtection:false,selfReferential:false},redemption:{parRedemption:true,permissionless:true,noticeHours:168,issuerCanPause:true},duration:{timeBound:false,daysToMaturity:null,preMaturityParExit:false},backing:{backingType:"onchain",verification:"quarterly_audit"},operational:{adminTimelock:true,upgradeable:true,curatorConcentration:"none",withdrawalFreezeAuthority:false,incidentHistory:false}}},
+ {symbol:"wrsETH",name:"Bridged rsETH (L2) — as listed",asOf:"2026-04-17",backtest:"Fourth wrap over a compromised shared supply.",inputs:{liquidity:{exitCapacityUsd24h:6e7,slippagePctAtSize:2.5,independentVenues:2,largestProtocolPositionUsd:9e7},wrap:{wrapDepth:4,parUnwrapPath:false},bridge:{bridgedSupply:true,sharedSupplyOFT:true,minVerifiersOnAnyRoute:1,supplyInvariantMonitored:false},oracle:{externalMarketOracle:false,independentProviders:1,deviationProtection:false,selfReferential:true},redemption:{parRedemption:false,permissionless:false,noticeHours:999,issuerCanPause:true},duration:{timeBound:false,daysToMaturity:null,preMaturityParExit:false},backing:{backingType:"onchain",verification:"self_reported"},operational:{adminTimelock:false,upgradeable:true,curatorConcentration:"none",withdrawalFreezeAuthority:false,incidentHistory:false}}},
+ {symbol:"PT-sUSDe",name:"Pendle Principal Token, sUSDe (120-day maturity, illustrative)",asOf:"2026-06-12",inputs:{liquidity:{exitCapacityUsd24h:5e7,slippagePctAtSize:1.8,independentVenues:1,largestProtocolPositionUsd:1.5e8},wrap:{wrapDepth:3,parUnwrapPath:false},bridge:{bridgedSupply:false,sharedSupplyOFT:false,minVerifiersOnAnyRoute:99,supplyInvariantMonitored:true},oracle:{externalMarketOracle:false,independentProviders:0,deviationProtection:false,selfReferential:true},redemption:{parRedemption:true,permissionless:true,noticeHours:0,issuerCanPause:false},duration:{timeBound:true,daysToMaturity:120,preMaturityParExit:false},backing:{backingType:"onchain",verification:"realtime_por"},operational:{adminTimelock:true,upgradeable:true,curatorConcentration:"none",withdrawalFreezeAuthority:false,incidentHistory:false}}},
+ {symbol:"PAXG",name:"Pax Gold",asOf:"2026-06-12",inputs:{liquidity:{exitCapacityUsd24h:4e8,slippagePctAtSize:.4,independentVenues:5,largestProtocolPositionUsd:6e7},wrap:{wrapDepth:1,parUnwrapPath:true},bridge:{bridgedSupply:false,sharedSupplyOFT:false,minVerifiersOnAnyRoute:99,supplyInvariantMonitored:true},oracle:{externalMarketOracle:true,independentProviders:2,deviationProtection:true,selfReferential:false},redemption:{parRedemption:true,permissionless:false,noticeHours:48,issuerCanPause:true},duration:{timeBound:false,daysToMaturity:null,preMaturityParExit:false},backing:{backingType:"physical",verification:"recurring_independent"},operational:{adminTimelock:true,upgradeable:true,curatorConcentration:"none",withdrawalFreezeAuthority:true,incidentHistory:false}}},
+ {symbol:"sBUIDL",name:"Securitize BUIDL (staked wrapper)",asOf:"2026-06-12",inputs:{liquidity:{exitCapacityUsd24h:1.2e8,slippagePctAtSize:.8,independentVenues:2,largestProtocolPositionUsd:5e7},wrap:{wrapDepth:2,parUnwrapPath:true},bridge:{bridgedSupply:false,sharedSupplyOFT:false,minVerifiersOnAnyRoute:99,supplyInvariantMonitored:true},oracle:{externalMarketOracle:true,independentProviders:1,deviationProtection:true,selfReferential:false},redemption:{parRedemption:true,permissionless:false,noticeHours:24,issuerCanPause:true},duration:{timeBound:false,daysToMaturity:null,preMaturityParExit:false},backing:{backingType:"offchain",verification:"recurring_independent"},operational:{adminTimelock:true,upgradeable:true,curatorConcentration:"none",withdrawalFreezeAuthority:true,incidentHistory:false}}},
+ {symbol:"JTRSY",name:"Centrifuge Treasury Fund Token",asOf:"2026-06-12",inputs:{liquidity:{exitCapacityUsd24h:8e7,slippagePctAtSize:1,independentVenues:2,largestProtocolPositionUsd:4e7},wrap:{wrapDepth:1,parUnwrapPath:true},bridge:{bridgedSupply:true,sharedSupplyOFT:false,minVerifiersOnAnyRoute:3,supplyInvariantMonitored:true},oracle:{externalMarketOracle:true,independentProviders:1,deviationProtection:false,selfReferential:false},redemption:{parRedemption:true,permissionless:false,noticeHours:48,issuerCanPause:true},duration:{timeBound:false,daysToMaturity:null,preMaturityParExit:false},backing:{backingType:"offchain",verification:"recurring_independent"},operational:{adminTimelock:true,upgradeable:true,curatorConcentration:"none",withdrawalFreezeAuthority:true,incidentHistory:false}}},
+ {symbol:"cvUSDC",name:"Curated USDC Vault Share (generic, single curator)",asOf:"2026-06-12",inputs:{liquidity:{exitCapacityUsd24h:3e7,slippagePctAtSize:.5,independentVenues:1,largestProtocolPositionUsd:2.5e7},wrap:{wrapDepth:2,parUnwrapPath:true},bridge:{bridgedSupply:false,sharedSupplyOFT:false,minVerifiersOnAnyRoute:99,supplyInvariantMonitored:true},oracle:{externalMarketOracle:false,independentProviders:1,deviationProtection:false,selfReferential:true},redemption:{parRedemption:true,permissionless:true,noticeHours:0,issuerCanPause:true},duration:{timeBound:false,daysToMaturity:null,preMaturityParExit:false},backing:{backingType:"onchain",verification:"realtime_por"},operational:{adminTimelock:false,upgradeable:true,curatorConcentration:"single",withdrawalFreezeAuthority:true,incidentHistory:false}}}
+];
+
+const results=ASSETS.map(scoreAsset);
+
+/* Hero verdict: rsETH backtest */
+const rs=results.find(r=>r.symbol==="rsETH");
+document.getElementById("verdict").innerHTML=`
+  <div class="verdict-head">
+    <span class="sym">rsETH — backtest, scored as listed</span>
+    <span class="asof">as of ${rs.asOf} · methodology CRS-1.0</span>
+  </div>
+  <div class="verdict-body">
+    <div class="vcell">
+      <div class="vlabel">What the market did</div>
+      <div class="vbig">93% LTV</div>
+      <div class="vsub">eMode, with a 95% liquidation threshold</div>
+    </div>
+    <div class="vcell">
+      <div class="vlabel">What the standard says</div>
+      <div class="vbig bad">INELIGIBLE</div>
+      <div class="vsub">composite ${rs.composite} — overridden by gate</div>
+    </div>
+  </div>
+  <div class="verdict-gate">▌ GATE G2 — single-attestor bridge route in the supply graph (1-of-1 DVN, Unichain). Gates cannot be averaged away.</div>
+  <div class="verdict-foot">This verdict required nothing that wasn't public on listing day. The bridge configuration was on-chain. <strong>The standard reads it; judgment didn't.</strong></div>`;
+
+/* Scoreboard */
+const tbody=document.querySelector("#board tbody");
+for(const r of results){
+  const tr=document.createElement("tr");
+  const gateStr=r.gates.length?r.gates.map(g=>g.gate).join(" + "):"—";
+  const bars=Object.keys(r.dims).map(k=>`
+    <div class="dimbar"><span>${k} ${DIMNAMES[k]}</span><span class="bar"><i style="width:${r.dims[k]}%"></i></span><span>${r.dims[k]}</span></div>`).join("");
+  tr.innerHTML=`
+    <td class="sym">${r.symbol}
+      <details class="breakdown"><summary>breakdown</summary>
+        <div style="font-size:13px;color:var(--steel);margin-top:8px">${r.name}${r.backtest?` · <span style="color:var(--t3)">BACKTEST: ${r.backtest}`:""}</span></div>
+        <div class="dimbars">${bars}</div>
+      </details>
+    </td>
+    <td class="num">${r.score}</td>
+    <td><span class="tierchip ${r.tier}">${r.tier}</span></td>
+    <td class="num">${r.eligible?r.ltv+"%":"0%"}</td>
+    <td class="num">${gateStr}</td>
+    <td>${r.eligible?(r.gates.some(g=>g.effect==="TIER3_CAP")?'<span class="mono" style="font-size:13px;color:var(--t3)">CAPPED T3</span>':'<span class="mono" style="font-size:13px;color:var(--t1)">ELIGIBLE</span>'):'<span class="inel">INELIGIBLE</span>'}</td>`;
+  tbody.appendChild(tr);
+}
+</script>
+</body>
+</html>
